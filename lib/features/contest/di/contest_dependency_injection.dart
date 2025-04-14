@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:eurovision_song_contest_clone/features/contest/data/datasources/contest_remote_data_source.dart';
 import 'package:eurovision_song_contest_clone/features/contest/data/repositories/contest_repository_impl.dart';
 import 'package:eurovision_song_contest_clone/features/contest/domain/repositories/contest_repository.dart';

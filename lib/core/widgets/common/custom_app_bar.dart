@@ -25,20 +25,33 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      surfaceTintColor: Colors.transparent,
+      scrolledUnderElevation: 0,
+      shadowColor: Colors.black.withAlpha(30),
       flexibleSpace: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/app-bar-bg.png'),
-            fit: BoxFit.fitWidth,
-            alignment: Alignment.center,
+            fit: BoxFit.cover,
           ),
         ),
       ),
       title: Text(
         title ?? '',
-        style: titleStyle ?? Theme.of(context).textTheme.headlineSmall,
+        style: titleStyle ??
+            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
       ),
-      leading: leading ?? (showBackButton ? const BackButton() : null),
+      leading: leading ??
+          (showBackButton
+              ? IconButton(
+                  icon:
+                      const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+                  onPressed: () => Navigator.of(context).pop(),
+                )
+              : null),
       actions: actions,
       backgroundColor: backgroundColor ?? Colors.transparent,
       elevation: elevation,

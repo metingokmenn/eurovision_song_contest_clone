@@ -58,6 +58,10 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  Future<void> reload() async {
+    await _initialize();
+  }
+
   Future<void> selectYear(int year) async {
     try {
       emit(state.copyWith(isLoading: true));

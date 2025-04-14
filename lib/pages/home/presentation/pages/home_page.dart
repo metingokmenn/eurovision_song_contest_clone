@@ -13,6 +13,7 @@ import 'package:eurovision_song_contest_clone/pages/home/presentation/widgets/vo
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eurovision_song_contest_clone/core/navigation/widgets/custom_navigation_bar.dart';
+import 'package:eurovision_song_contest_clone/core/theme/app_colors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -47,62 +48,125 @@ class _HomePageView extends StatelessWidget {
       builder: (context, state) {
         if (state.isLoading) {
           return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+            body: Center(
+              child: CircularProgressIndicator(
+                color: AppColors.magenta,
+              ),
+            ),
           );
         }
 
         if (state.error != null) {
           return Scaffold(
-            body: Center(child: Text('Error: ${state.error}')),
+            body: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.error_outline,
+                    color: AppColors.error,
+                    size: 48,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Error: ${state.error}',
+                    style: Theme.of(context).textTheme.titleMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<HomeCubit>().reload();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.magenta,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                    ),
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            ),
           );
         }
 
         final tabController = state.tabController;
         if (tabController == null || state.currentContest == null) {
           return const Scaffold(
-            body: Center(child: Text('Initializing...')),
+            body: Center(
+              child: Text('Initializing...'),
+            ),
           );
         }
 
         return Scaffold(
-          appBar: const CustomAppBar(),
+          backgroundColor: AppColors.background,
+          appBar: const CustomAppBar(
+            showBackButton: false,
+          ),
           body: Column(
             children: [
               HomeTabBar(controller: tabController),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                  vertical: 16.0,
+                ),
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withAlpha(10),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
-                  child: DropdownButton<int>(
-                    value: state.selectedYear,
-                    isExpanded: true,
-                    underline: const SizedBox(),
-                    icon: const Icon(Icons.arrow_drop_down),
-                    items: state.availableYears?.map((year) {
-                      return DropdownMenuItem<int>(
-                        value: year,
-                        child: Text(
-                          'Eurovision $year',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                          ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<int>(
+                      value: state.selectedYear,
+                      isExpanded: true,
+                      icon: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: AppColors.magenta.withAlpha(20),
+                          shape: BoxShape.circle,
                         ),
-                      );
-                    }).toList(),
-                    onChanged: (int? value) {
-                      if (value != null) {
-                        context.read<HomeCubit>().selectYear(value);
-                      }
-                    },
+                        child: const Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          color: AppColors.magenta,
+                        ),
+                      ),
+                      items: state.availableYears?.map((year) {
+                        return DropdownMenuItem<int>(
+                          value: year,
+                          child: Text(
+                            'Eurovision $year',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (int? value) {
+                        if (value != null) {
+                          context.read<HomeCubit>().selectYear(value);
+                        }
+                      },
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
               Expanded(
                 child: TabBarView(
                   controller: tabController,
