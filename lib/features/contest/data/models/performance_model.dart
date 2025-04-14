@@ -22,4 +22,13 @@ class PerformanceModel {
           (json['scores'] as List).map((e) => ScoreModel.fromJson(e)).toList(),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'contestantId': contestantId,
+      'running': running,
+      'place': place,
+      'scores': scores?.map((e) => e.toJson()).toList(),
+    };
+  }
 }

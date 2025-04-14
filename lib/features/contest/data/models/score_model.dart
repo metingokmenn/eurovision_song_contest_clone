@@ -12,4 +12,12 @@ class ScoreModel {
       votes: Map<String, int>.from(json['votes'] as Map),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'points': points,
+      'votes': votes, 
+    };
+  }
 }

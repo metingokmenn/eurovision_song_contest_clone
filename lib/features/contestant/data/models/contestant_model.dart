@@ -83,4 +83,28 @@ class ContestantModel {
           : null,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'country': country,
+      'artist': artist,
+      'song': song,
+      'url': url,
+      'lyrics': lyrics?.map((e) => e?.toJson()).toList(),
+      'videoUrls': videoUrls,
+      'dancers': dancers,
+      'backings': backings,
+      'composers': composers,
+      'lyricists': lyricists,
+      'writers': writers,
+      'conductor': conductor,
+      'stageDirector': stageDirector,
+      'tone': tone,
+      'bpm': bpm,
+      'broadcaster': broadcaster,
+      'spokesperson': spokesperson,
+      'commentators': commentators,
+    };
+  }
 }

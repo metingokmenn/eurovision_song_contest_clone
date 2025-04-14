@@ -18,4 +18,12 @@ class LyricsModel {
       content: json['content'] as String?,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'languages': languages,
+      'title': title,
+      'content': content,
+    };
+  }
 }

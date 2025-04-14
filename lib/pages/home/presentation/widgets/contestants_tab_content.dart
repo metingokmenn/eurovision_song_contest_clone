@@ -5,6 +5,9 @@ import 'package:eurovision_song_contest_clone/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/constants/constant_index.dart';
+import '../../../video/view/video_player_page.dart';
+
 class ContestantsTabContent extends StatelessWidget {
   const ContestantsTabContent({super.key, required this.contest});
 
@@ -30,7 +33,7 @@ class ContestantsTabContent extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildContestantsDropdown(context, state),
-                      const SizedBox(height: 24),
+                      AppSizedBox.large,
                       if (state.isLoading)
                         const Center(
                           child: CircularProgressIndicator(
@@ -74,7 +77,7 @@ class ContestantsTabContent extends StatelessWidget {
                 color: AppColors.magenta,
                 size: 30,
               ),
-              const SizedBox(width: 12),
+              AppSizedBox.widthSMedium,
               Text(
                 'Contestants',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -83,7 +86,7 @@ class ContestantsTabContent extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          AppSizedBox.small,
           Text(
             'Explore all artists competing in Eurovision ${contest.year}',
             style: const TextStyle(
@@ -112,7 +115,7 @@ class ContestantsTabContent extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
         ),
-        const SizedBox(height: 16),
+        AppSizedBox.medium,
         Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -153,7 +156,7 @@ class ContestantsTabContent extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             _buildCountryAvatar(contestant?.country),
-                            const SizedBox(width: 12),
+                            AppSizedBox.widthSMedium,
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,7 +171,6 @@ class ContestantsTabContent extends StatelessWidget {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  const SizedBox(height: 2),
                                   Text(
                                     contestant?.song ?? '',
                                     style: const TextStyle(
@@ -178,7 +180,6 @@ class ContestantsTabContent extends StatelessWidget {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  const SizedBox(height: 2),
                                   Text(
                                     contestant?.country ?? '',
                                     style: const TextStyle(
@@ -236,7 +237,7 @@ class ContestantsTabContent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildCountryFlag(contestant.country),
-                  const SizedBox(width: 16),
+                  AppSizedBox.widthMedium,
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,7 +251,7 @@ class ContestantsTabContent extends StatelessWidget {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 8),
+                        AppSizedBox.small,
                         if (contestant.song != null) ...[
                           Text(
                             contestant.song!,
@@ -263,7 +264,7 @@ class ContestantsTabContent extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ],
-                        const SizedBox(height: 8),
+                        AppSizedBox.small,
                         Text(
                           contestant.country ?? 'Unknown Country',
                           style: const TextStyle(
@@ -281,14 +282,14 @@ class ContestantsTabContent extends StatelessWidget {
           ),
         ),
 
-        const SizedBox(height: 24),
+        AppSizedBox.large,
         Text(
           'Song Details',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
         ),
-        const SizedBox(height: 16),
+        AppSizedBox.medium,
 
         // Song details section
         Container(
@@ -354,14 +355,14 @@ class ContestantsTabContent extends StatelessWidget {
         // Media section
         if (contestant.videoUrls != null &&
             contestant.videoUrls!.isNotEmpty) ...[
-          const SizedBox(height: 24),
+          AppSizedBox.large,
           Text(
             'Media',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
           ),
-          const SizedBox(height: 16),
+          AppSizedBox.medium,
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -385,7 +386,7 @@ class ContestantsTabContent extends StatelessWidget {
                       color: AppColors.magenta,
                       size: 22,
                     ),
-                    const SizedBox(width: 8),
+                    AppSizedBox.widthSmall,
                     Text(
                       'Videos',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -394,7 +395,7 @@ class ContestantsTabContent extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                AppSizedBox.medium,
                 ...contestant.videoUrls!
                     .where((url) => url != null)
                     .map((url) => _buildVideoLink(url!)),
@@ -405,14 +406,14 @@ class ContestantsTabContent extends StatelessWidget {
 
         // Lyrics section
         if (contestant.lyrics != null && contestant.lyrics!.isNotEmpty) ...[
-          const SizedBox(height: 24),
+          AppSizedBox.large,
           Text(
             'Lyrics',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
           ),
-          const SizedBox(height: 16),
+          AppSizedBox.medium,
           Container(
             padding: const EdgeInsets.all(20),
             width: double.infinity,
@@ -437,7 +438,7 @@ class ContestantsTabContent extends StatelessWidget {
                       color: AppColors.magenta,
                       size: 22,
                     ),
-                    const SizedBox(width: 8),
+                    AppSizedBox.widthSmall,
                     Expanded(
                       child: Text(
                         'Song Lyrics',
@@ -450,13 +451,13 @@ class ContestantsTabContent extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                AppSizedBox.medium,
                 _buildLyricsContent(context, contestant),
               ],
             ),
           ),
         ],
-        const SizedBox(height: 30),
+        AppSizedBox.large,
       ],
     );
   }
@@ -487,7 +488,7 @@ class ContestantsTabContent extends StatelessWidget {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 16),
+              AppSizedBox.widthMedium,
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -500,7 +501,7 @@ class ContestantsTabContent extends StatelessWidget {
                         fontSize: 13,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    AppSizedBox.xsmall,
                     Text(
                       value,
                       style: const TextStyle(
@@ -596,7 +597,7 @@ class ContestantsTabContent extends StatelessWidget {
             color: AppColors.magenta,
             size: 24,
           ),
-          const SizedBox(height: 4),
+          AppSizedBox.xsmall,
           Text(
             countryCode,
             style: const TextStyle(
@@ -650,45 +651,107 @@ class ContestantsTabContent extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 2),
-            child: Icon(
-              Icons.play_circle_outline,
-              color: AppColors.magenta.withAlpha(150),
-              size: 18,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  displayUrl,
-                  style: const TextStyle(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w500,
-                    decoration: TextDecoration.underline,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+      child: Builder(builder: (context) {
+        return InkWell(
+          onTap: () => _openVideoPlayer(context, url),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: Icon(
+                  Icons.play_circle_outline,
+                  color: AppColors.magenta.withAlpha(150),
+                  size: 18,
                 ),
-                const Text(
-                  'Tap to open video',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.textTertiary,
-                  ),
+              ),
+              AppSizedBox.widthSMedium,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      displayUrl,
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w500,
+                        decoration: TextDecoration.underline,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const Text(
+                      'Tap to play video',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        );
+      }),
+    );
+  }
+
+  void _openVideoPlayer(BuildContext context, String url) {
+    final state = context.read<HomeCubit>().state;
+    final contestant = state.currentContestant;
+
+    // Extract lyrics content if available
+    String? lyrics;
+    if (contestant?.lyrics != null && contestant!.lyrics!.isNotEmpty) {
+      try {
+        if (contestant.lyrics!.first?.content != null) {
+          lyrics = contestant.lyrics!.first!.content;
+        }
+      } catch (e) {
+        // Ignore errors when retrieving lyrics
+      }
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoPlayerPage(
+          videoUrl: url,
+          videoTitle: _getVideoTitle(url),
+          artistName: contestant?.artist,
+          songName: contestant?.song,
+          lyrics: lyrics,
+        ),
       ),
     );
+  }
+
+  String _getVideoTitle(String url) {
+    // Try to extract a meaningful title from the URL
+    try {
+      final uri = Uri.parse(url);
+
+      // For YouTube URLs, extract video ID or title if possible
+      if (url.contains('youtube.com') || url.contains('youtu.be')) {
+        // Extract the title from path segments if possible
+        if (uri.pathSegments.isNotEmpty) {
+          final lastSegment = uri.pathSegments.last;
+          if (lastSegment.isNotEmpty && lastSegment != 'watch') {
+            return 'YouTube Video: ${lastSegment.replaceAll('-', ' ')}';
+          }
+        }
+        return 'YouTube Video';
+      }
+
+      // For other URLs, return the host name
+      if (uri.host.isNotEmpty) {
+        return 'Video from ${uri.host}';
+      }
+    } catch (_) {}
+
+    // Default fallback
+    return 'Video';
   }
 
   String _getDisplayUrl(String url) {

@@ -40,13 +40,26 @@ class ContestModel {
       slogan: json['slogan'] as String?,
       logoUrl: json['logoUrl'] as String?,
       voting: json['voting'] as String?,
-      presenters: List<String>.from(json['presenters'] as List),
-      broadcasters: List<String>.from(json['broadcasters'] as List),
-      contestants: (json['contestants'] as List)
-          .map((e) => ContestantModel.fromJson(e))
-          .toList(),
-      rounds:
-          (json['rounds'] as List).map((e) => RoundModel.fromJson(e)).toList(),
+      presenters: json['presenters'] != null
+          ? List<String>.from(json['presenters'] as List)
+          : [],
+      broadcasters: json['broadcasters'] != null
+          ? List<String>.from(json['broadcasters'] as List)
+          : [],
+      contestants: json['contestants'] != null
+          ? (json['contestants'] as List)
+              .map((e) => e != null
+                  ? ContestantModel.fromJson(e as Map<String, dynamic>)
+                  : null)
+              .toList()
+          : [],
+      rounds: json['rounds'] != null
+          ? (json['rounds'] as List)
+              .map((e) => e != null
+                  ? RoundModel.fromJson(e as Map<String, dynamic>)
+                  : null)
+              .toList()
+          : [],
     );
   }
 }

@@ -3,6 +3,8 @@ import 'package:eurovision_song_contest_clone/features/contest/data/models/round
 import 'package:eurovision_song_contest_clone/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/constant_index.dart';
+
 class RoundsTabContent extends StatelessWidget {
   const RoundsTabContent({super.key, required this.contest});
 
@@ -28,7 +30,7 @@ class RoundsTabContent extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                         ),
                   ),
-                  const SizedBox(height: 16),
+                  AppSizedBox.medium,
                   _buildRoundsTimeline(context),
                 ],
               ),
@@ -63,7 +65,7 @@ class RoundsTabContent extends StatelessWidget {
                 color: AppColors.magenta,
                 size: 30,
               ),
-              const SizedBox(width: 12),
+              AppSizedBox.widthSMedium,
               Text(
                 'Competition Rounds',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -72,7 +74,7 @@ class RoundsTabContent extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          AppSizedBox.small,
           Text(
             'Eurovision ${contest.year} event schedule',
             style: const TextStyle(
@@ -149,7 +151,7 @@ class RoundsTabContent extends StatelessWidget {
               size: 24,
             ),
           ),
-          const SizedBox(width: 16),
+          AppSizedBox.widthMedium,
           Expanded(
             child: Text(
               'No rounds information available for this contest.',
@@ -211,7 +213,7 @@ class RoundsTabContent extends StatelessWidget {
                     ),
                 ],
               ),
-              const SizedBox(width: 16),
+              AppSizedBox.widthMedium,
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,7 +224,7 @@ class RoundsTabContent extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                     ),
-                    const SizedBox(height: 8),
+                    AppSizedBox.small,
                     Row(
                       children: [
                         const Icon(
@@ -230,7 +232,7 @@ class RoundsTabContent extends StatelessWidget {
                           size: 16,
                           color: AppColors.textSecondary,
                         ),
-                        const SizedBox(width: 8),
+                        AppSizedBox.widthSmall,
                         Text(
                           date,
                           style: const TextStyle(
@@ -240,7 +242,7 @@ class RoundsTabContent extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 4),
+                    AppSizedBox.xsmall,
                     Row(
                       children: [
                         const Icon(
@@ -248,7 +250,7 @@ class RoundsTabContent extends StatelessWidget {
                           size: 16,
                           color: AppColors.textSecondary,
                         ),
-                        const SizedBox(width: 8),
+                        AppSizedBox.widthSmall,
                         Text(
                           time,
                           style: const TextStyle(

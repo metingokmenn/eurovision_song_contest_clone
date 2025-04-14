@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:eurovision_song_contest_clone/core/theme/app_colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
@@ -57,6 +58,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: elevation,
       centerTitle: true,
       bottom: bottom,
+      shape: const RoundedRectangleBorder(),
     );
   }
 

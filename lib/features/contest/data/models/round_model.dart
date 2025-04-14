@@ -30,4 +30,14 @@ class RoundModel {
           : null,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'date': date,
+      'time': time,
+      'performances': performances?.map((e) => e?.toJson()).toList(),
+      'disqualifieds': disqualifieds,
+    };
+  }
 }

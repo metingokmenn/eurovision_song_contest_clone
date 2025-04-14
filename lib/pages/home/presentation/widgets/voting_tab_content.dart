@@ -2,6 +2,8 @@ import 'package:eurovision_song_contest_clone/features/contest/data/models/conte
 import 'package:eurovision_song_contest_clone/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/constant_index.dart';
+
 class VotingTabContent extends StatelessWidget {
   const VotingTabContent({super.key, required this.contest});
 
@@ -22,7 +24,7 @@ class VotingTabContent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildVotingSystemSection(context),
-                  const SizedBox(height: 24),
+                  AppSizedBox.large,
                   if (!_isExceptionalYear(contest.year))
                     _buildVotingDistributionSection(context)
                   else
@@ -60,7 +62,7 @@ class VotingTabContent extends StatelessWidget {
                 color: AppColors.magenta,
                 size: 30,
               ),
-              const SizedBox(width: 12),
+              AppSizedBox.widthSMedium,
               Text(
                 'Voting',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -69,7 +71,7 @@ class VotingTabContent extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          AppSizedBox.small,
           Text(
             'Explore the Eurovision ${contest.year} voting system',
             style: const TextStyle(
@@ -92,7 +94,7 @@ class VotingTabContent extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
         ),
-        const SizedBox(height: 16),
+        AppSizedBox.medium,
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -126,7 +128,7 @@ class VotingTabContent extends StatelessWidget {
                       size: 24,
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  AppSizedBox.widthMedium,
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +142,7 @@ class VotingTabContent extends StatelessWidget {
                                     fontWeight: FontWeight.w600,
                                   ),
                         ),
-                        const SizedBox(height: 12),
+                        AppSizedBox.sMedium,
                         Text(
                           _getVotingSystemText(contest.year),
                           style:
@@ -202,7 +204,7 @@ class VotingTabContent extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
         ),
-        const SizedBox(height: 16),
+        AppSizedBox.medium,
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -232,7 +234,7 @@ class VotingTabContent extends StatelessWidget {
                       color: AppColors.textSecondary,
                       size: 24,
                     ),
-                    const SizedBox(width: 16),
+                    AppSizedBox.widthMedium,
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,7 +247,7 @@ class VotingTabContent extends StatelessWidget {
                               color: AppColors.text,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          AppSizedBox.small,
                           Text(
                             message,
                             style: const TextStyle(
@@ -276,7 +278,7 @@ class VotingTabContent extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
         ),
-        const SizedBox(height: 16),
+        AppSizedBox.medium,
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -300,7 +302,7 @@ class VotingTabContent extends StatelessWidget {
                     color: AppColors.magenta,
                     size: 22,
                   ),
-                  const SizedBox(width: 8),
+                  AppSizedBox.widthSmall,
                   Expanded(
                     child: Text(
                       'Voting Breakdown',
@@ -312,7 +314,7 @@ class VotingTabContent extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              AppSizedBox.medium,
               _buildVotingBreakdown(context),
             ],
           ),
@@ -339,7 +341,7 @@ class VotingTabContent extends StatelessWidget {
               color: AppColors.textSecondary,
               size: 20,
             ),
-            const SizedBox(width: 12),
+            AppSizedBox.widthSMedium,
             Expanded(
               child: Text(
                 'Detailed voting breakdown not available for ${contest.year}.',
@@ -365,11 +367,11 @@ class VotingTabContent extends StatelessWidget {
                       vote.color,
                       vote.icon,
                     ),
-                    const SizedBox(height: 12),
+                    AppSizedBox.sMedium,
                   ],
                 ))
             .toList(),
-        const SizedBox(height: 8),
+        AppSizedBox.small,
         Text(
           _getVotingInfoText(contest.year),
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -487,7 +489,7 @@ class VotingTabContent extends StatelessWidget {
             color: color.withAlpha(180),
             size: 24,
           ),
-          const SizedBox(width: 16),
+          AppSizedBox.widthMedium,
           Expanded(
             child: Text(
               name,

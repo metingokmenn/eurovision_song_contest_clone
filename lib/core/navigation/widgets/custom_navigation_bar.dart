@@ -1,6 +1,7 @@
 import 'package:eurovision_song_contest_clone/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../constants/constant_index.dart';
 import '../cubit/navigation_cubit.dart';
 import '../cubit/navigation_state.dart';
 
@@ -89,7 +90,7 @@ class CustomNavigationBar extends StatelessWidget {
               color: isSelected ? AppColors.magenta : AppColors.textTertiary,
               size: 24,
             ),
-            const SizedBox(height: 4),
+            AppSizedBox.xsmall,
             Text(
               label,
               style: TextStyle(

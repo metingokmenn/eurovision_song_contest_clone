@@ -1,12 +1,14 @@
+import 'package:eurovision_song_contest_clone/core/navigation/app_layout.dart';
+import 'package:eurovision_song_contest_clone/core/theme/cubit/theme_cubit.dart';
 import 'package:eurovision_song_contest_clone/features/contestant/data/datasources/contestant_remote_data_source.dart';
 import 'package:eurovision_song_contest_clone/features/contestant/data/repositories/contestant_repository_impl.dart';
 import 'package:eurovision_song_contest_clone/features/contestant/domain/usecases/get_contestant_by_year.dart';
 import 'package:eurovision_song_contest_clone/features/contestant/domain/usecases/get_contestants_by_year.dart';
+import 'package:eurovision_song_contest_clone/features/search/di/search_dependency_injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eurovision_song_contest_clone/core/theme/app_theme.dart';
 import 'package:eurovision_song_contest_clone/core/navigation/cubit/navigation_cubit.dart';
-import 'package:eurovision_song_contest_clone/pages/home/presentation/pages/home_page.dart';
 import 'package:eurovision_song_contest_clone/features/contest/domain/usecases/get_contest_by_year.dart';
 import 'package:eurovision_song_contest_clone/features/contest/domain/usecases/get_contest_years.dart';
 import 'package:eurovision_song_contest_clone/features/contest/di/contest_dependency_injection.dart';
@@ -36,30 +38,43 @@ class MyApp extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
+        BlocProvider<ThemeCubit>(
+          create: (context) => ThemeCubit(),
+        ),
+        BlocProvider<NavigationCubit>(
           create: (context) => NavigationCubit(),
         ),
-        RepositoryProvider<GetContestByYear>(
-          create: (context) => GetContestByYear(contestRepository),
-        ),
-        RepositoryProvider<GetContestYears>(
-          create: (context) => GetContestYears(contestRepository),
-        ),
-        RepositoryProvider<GetContestantByYear>(
-          create: (context) => GetContestantByYear(contestantRepository),
-        ),
-        RepositoryProvider<GetContestantsByYear>(
-          create: (context) => GetContestantsByYear(contestantRepository),
-        ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Eurovision Song Contest',
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode
-            .system, // This will automatically switch between light and dark theme
-        home: const HomePage(),
+      child: MultiRepositoryProvider(
+        providers: [
+          // Contest and contestant providers
+          RepositoryProvider<GetContestByYear>(
+            create: (context) => GetContestByYear(contestRepository),
+          ),
+          RepositoryProvider<GetContestYears>(
+            create: (context) => GetContestYears(contestRepository),
+          ),
+          RepositoryProvider<GetContestantByYear>(
+            create: (context) => GetContestantByYear(contestantRepository),
+          ),
+          RepositoryProvider<GetContestantsByYear>(
+            create: (context) => GetContestantsByYear(contestantRepository),
+          ),
+          // Search providers
+          ...SearchDependencyInjection.getRepositoryProviders(),
+        ],
+        child: BlocBuilder<ThemeCubit, ThemeState>(
+          builder: (context, state) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Eurovision Song Contest',
+              theme: AppTheme.lightTheme,
+              darkTheme: AppTheme.darkTheme,
+              themeMode: state.themeMode,
+              home: const AppLayout(),
+            );
+          },
+        ),
       ),
     );
   }
