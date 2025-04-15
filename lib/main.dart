@@ -18,11 +18,11 @@ import 'package:eurovision_song_contest_clone/features/home/data/repositories/co
 import 'package:http/http.dart' as http;
 
 void main() {
-  runApp(const MyApp());
+  runApp(const EurovisionSongContestApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class EurovisionSongContestApp extends StatelessWidget {
+  const EurovisionSongContestApp({super.key});
 
   @override
   Widget build(BuildContext context) {
