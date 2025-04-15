@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:eurovision_song_contest_clone/core/theme/app_colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
@@ -28,7 +27,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       surfaceTintColor: Colors.transparent,
       scrolledUnderElevation: 0,
-      shadowColor: Colors.black.withAlpha(30),
+      shadowColor: const Color.fromARGB(30, 0, 0, 0),
       flexibleSpace: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(

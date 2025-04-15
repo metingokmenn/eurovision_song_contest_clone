@@ -14,7 +14,6 @@ class CustomNavigationBar extends StatelessWidget {
       builder: (context, state) {
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white,
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withAlpha(10),
