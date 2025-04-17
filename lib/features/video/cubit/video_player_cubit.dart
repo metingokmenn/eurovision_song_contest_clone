@@ -111,6 +111,9 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
+
+    // Ensure system UI is always in edge-to-edge mode
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 
   // Initialize the player based on the video URL
@@ -229,20 +232,13 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
       });
     }
 
+    // Only toggle controls visibility
     toggleControlsVisibility(!state.isControlsVisible);
   }
 
-  // Toggle fullscreen mode
-  void toggleFullScreen() {
-    final newFullScreenState = !state.isFullScreen;
-
-    if (newFullScreenState) {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    } else {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    }
-
-    emit(state.copyWith(isFullScreen: newFullScreenState));
+  // Get shareable URL (original URL for sharing with others)
+  String getShareableUrl() {
+    return state.videoUrl;
   }
 
   // Toggle controls visibility

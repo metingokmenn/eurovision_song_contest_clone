@@ -69,7 +69,7 @@ class _VideoPlayerContent extends StatelessWidget {
     final cubit = context.read<VideoPlayerCubit>();
 
     // For landscape mode, use full screen size
-    if (isLandscape || state.isFullScreen) {
+    if (isLandscape) {
       return Container(
         color: Colors.black,
         width: double.infinity,
@@ -174,10 +174,7 @@ class _VideoPlayerContent extends StatelessWidget {
         ),
 
         // Lyrics section if available (only in portrait mode)
-        if (!isLandscape &&
-            !state.isFullScreen &&
-            state.lyrics != null &&
-            state.lyrics!.isNotEmpty)
+        if (!isLandscape && state.lyrics != null && state.lyrics!.isNotEmpty)
           _buildLyricsSection(context, state),
       ],
     );
@@ -245,7 +242,7 @@ class _VideoPlayerContent extends StatelessWidget {
       return _buildErrorWidget();
     }
 
-    if (isLandscape || state.isFullScreen) {
+    if (isLandscape) {
       return SizedBox.expand(
         child: WebViewWidget(controller: state.webViewController!),
       );
@@ -306,10 +303,7 @@ class _VideoPlayerContent extends StatelessWidget {
         ),
 
         // Lyrics section if available (only in portrait mode)
-        if (!isLandscape &&
-            !state.isFullScreen &&
-            state.lyrics != null &&
-            state.lyrics!.isNotEmpty)
+        if (!isLandscape && state.lyrics != null && state.lyrics!.isNotEmpty)
           _buildLyricsSection(context, state),
       ],
     );
@@ -358,7 +352,7 @@ class _VideoPlayerContent extends StatelessWidget {
     final cubit = context.read<VideoPlayerCubit>();
 
     return GestureDetector(
-      onTap: () => cubit.togglePlayPause(),
+      onTap: () => cubit.toggleControlsVisibility(!state.isControlsVisible),
       child: Container(
         color: Colors.transparent,
         child: AnimatedOpacity(
@@ -369,17 +363,21 @@ class _VideoPlayerContent extends StatelessWidget {
               // Darkened background for visibility
               Container(
                 // ignore: deprecated_member_use
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withAlpha(120),
               ),
+
               // Play/pause button
               Center(
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  color: AppColors.magenta.withAlpha(180),
-                  child: Icon(
-                    state.isPlaying ? Icons.pause : Icons.play_arrow,
-                    color: Colors.white,
-                    size: 32,
+                child: GestureDetector(
+                  onTap: () => cubit.togglePlayPause(),
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    color: AppColors.magenta.withAlpha(180),
+                    child: Icon(
+                      state.isPlaying ? Icons.pause : Icons.play_arrow,
+                      color: Colors.white,
+                      size: 32,
+                    ),
                   ),
                 ),
               ),

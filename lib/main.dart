@@ -1,9 +1,14 @@
+import 'package:eurovision_song_contest_clone/core/data/app_data_manager.dart';
+import 'package:eurovision_song_contest_clone/core/di/service_provider.dart';
 import 'package:eurovision_song_contest_clone/core/splash/splash_screen.dart';
 import 'package:eurovision_song_contest_clone/core/theme/cubit/theme_cubit.dart';
+
 import 'package:eurovision_song_contest_clone/features/home/data/datasources/contestant_remote_data_source.dart';
 import 'package:eurovision_song_contest_clone/features/home/data/repositories/contestant_repository_impl.dart';
+import 'package:eurovision_song_contest_clone/features/home/di/repository_factory.dart';
 import 'package:eurovision_song_contest_clone/features/home/domain/usecases/get_contestant_by_year.dart';
 import 'package:eurovision_song_contest_clone/features/home/domain/usecases/get_contestants_by_year.dart';
+
 import 'package:eurovision_song_contest_clone/features/search/di/search_dependency_injection.dart';
 
 import 'package:flutter/material.dart';
@@ -13,22 +18,44 @@ import 'package:eurovision_song_contest_clone/core/navigation/cubit/navigation_c
 import 'package:eurovision_song_contest_clone/features/home/domain/usecases/get_contest_by_year.dart';
 import 'package:eurovision_song_contest_clone/features/home/domain/usecases/get_contest_years.dart';
 
-import 'package:eurovision_song_contest_clone/features/home/data/datasources/contest_remote_data_source.dart';
-import 'package:eurovision_song_contest_clone/features/home/data/repositories/contest_repository_impl.dart';
 import 'package:http/http.dart' as http;
 
-void main() {
-  runApp(const EurovisionSongContestApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize the AppDataManager singleton
+  final appDataManager = AppDataManager();
+  await appDataManager.initialize();
+  await appDataManager.loadInitialData();
+
+  runApp(EurovisionSongContestApp(appDataManager: appDataManager));
 }
 
-class EurovisionSongContestApp extends StatelessWidget {
-  const EurovisionSongContestApp({super.key});
+class EurovisionSongContestApp extends StatefulWidget {
+  final AppDataManager appDataManager;
+
+  const EurovisionSongContestApp({super.key, required this.appDataManager});
+
+  @override
+  State<EurovisionSongContestApp> createState() =>
+      _EurovisionSongContestAppState();
+}
+
+class _EurovisionSongContestAppState extends State<EurovisionSongContestApp> {
+  final ServiceProvider _serviceProvider = ServiceProvider();
+
+  @override
+  void dispose() {
+    // Clean up resources when app is closed
+    _serviceProvider.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final contestRepository = ContestRepositoryImpl(
-      remoteDataSource: ContestRemoteDataSource(client: http.Client()),
-    );
+    // Create repositories for initial data loading
+    final contestRepository = RepositoryFactory.createRepository(
+        appDataManager: widget.appDataManager);
 
     final contestantRepository = ContestantRepositoryImpl(
       remoteDataSource: ContestantRemoteDataSource(client: http.Client()),
@@ -57,6 +84,10 @@ class EurovisionSongContestApp extends StatelessWidget {
           ),
           RepositoryProvider<GetContestantsByYear>(
             create: (context) => GetContestantsByYear(contestantRepository),
+          ),
+          // AppDataManager provider
+          RepositoryProvider<AppDataManager>(
+            create: (context) => widget.appDataManager,
           ),
           // Search providers
           ...SearchDependencyInjection.getRepositoryProviders(),

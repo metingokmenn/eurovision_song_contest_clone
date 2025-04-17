@@ -62,4 +62,21 @@ class ContestModel {
           : [],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'year': year,
+      'arena': arena,
+      'city': city,
+      'country': country,
+      'intendedCountry': intendedCountry,
+      'slogan': slogan,
+      'logoUrl': logoUrl,
+      'voting': voting,
+      'presenters': presenters,
+      'broadcasters': broadcasters,
+      'contestants': contestants?.map((e) => e?.toJson()).toList(),
+      'rounds': rounds?.map((e) => e?.toJson()).toList(),
+    };
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:eurovision_song_contest_clone/core/utils/country_code_converter.dart';
 import 'package:eurovision_song_contest_clone/core/widgets/common/custom_dropdown.dart';
+import 'package:eurovision_song_contest_clone/core/widgets/selectors/contestant_selector.dart';
 import 'package:eurovision_song_contest_clone/features/home/data/models/contest_model.dart';
 import 'package:eurovision_song_contest_clone/features/home/presentation/cubit/home_cubit.dart';
 import 'package:eurovision_song_contest_clone/features/home/presentation/cubit/home_state.dart';
@@ -103,67 +104,9 @@ class ContestantsTabContent extends StatelessWidget {
             ? contest.contestants!.first!.id
             : null);
 
-    return CustomDropdown<int>(
-      value: currentContestantId,
-      hint: 'Select a contestant',
-      labelText: 'Select Contestant',
-      dynamicItemHeight: true,
-      items: contest.contestants?.map((contestant) {
-            return DropdownMenuItem<int>(
-              value: contestant?.id,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _buildCountryAvatar(contestant?.country),
-                    AppSizedBox.widthSMedium,
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            contestant?.artist ?? 'Unknown',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            contestant?.song ?? '',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: AppColors.textSecondary,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            contestant?.country ?? '',
-                            style: const TextStyle(
-                              fontSize: 11,
-                              color: AppColors.textTertiary,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }).toList() ??
-          [],
-      onChanged: (int? value) {
-        if (value != null) {
-          context.read<HomeCubit>().selectContestant(value);
-        }
-      },
+    return ContestantSelector(
+      contestants: contest.contestants ?? [],
+      selectedContestant: state.currentContestant,
     );
   }
 

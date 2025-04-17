@@ -29,6 +29,20 @@ class ContestRemoteDataSource {
     }
   }
 
+  Future<List<dynamic>> getContestantsByYear(int year) async {
+    final response = await client.get(Uri.parse('$baseUrl/contests/$year'));
+    if (response.statusCode == 200) {
+      final contestData = json.decode(response.body);
+      if (contestData.containsKey('contestants') &&
+          contestData['contestants'] is List) {
+        return List<dynamic>.from(contestData['contestants']);
+      }
+      return [];
+    } else {
+      throw Exception('Failed to load contestants for year $year');
+    }
+  }
+
   Future<List<int>> getJuniorContestYears() async {
     final response = await client.get(
       Uri.parse('$baseUrl/junior/contests/years'),

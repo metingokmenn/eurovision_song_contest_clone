@@ -4,10 +4,12 @@ import '../../../core/theme/app_colors.dart';
 
 class HomeTabBar extends StatelessWidget implements PreferredSizeWidget {
   final TabController controller;
+  final Function(int)? onTabChanged;
 
   const HomeTabBar({
     super.key,
     required this.controller,
+    this.onTabChanged,
   });
 
   @override
@@ -17,7 +19,7 @@ class HomeTabBar extends StatelessWidget implements PreferredSizeWidget {
         color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(10),
+            color: const Color.fromARGB(10, 0, 0, 0),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -47,6 +49,7 @@ class HomeTabBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         isScrollable: true,
         controller: controller,
+        onTap: onTabChanged,
         tabs: const [
           Tab(
             text: 'Overview',

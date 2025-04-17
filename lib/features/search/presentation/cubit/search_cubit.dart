@@ -1,15 +1,19 @@
+import 'package:eurovision_song_contest_clone/features/search/domain/repositories/search_repository.dart';
 import 'package:eurovision_song_contest_clone/features/search/domain/usecases/search_contests.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 
 import 'search_state.dart';
 
 class SearchCubit extends Cubit<SearchState> {
   final SearchContests _searchContests;
+  final SearchRepository _repository;
 
   SearchCubit({
     required SearchContests searchContests,
+    required SearchRepository repository,
   })  : _searchContests = searchContests,
+        _repository = repository,
         super(const SearchState());
 
   void updateQuery(String query) {
@@ -21,6 +25,7 @@ class SearchCubit extends Cubit<SearchState> {
         contestResults: [],
         contestantResults: [],
         isLoading: false,
+        usingCachedData: false,
       ));
     }
   }
@@ -45,29 +50,38 @@ class SearchCubit extends Cubit<SearchState> {
     emit(state.copyWith(isLoading: true, clearError: true));
 
     try {
+      // Check if we have enough cached data for searching
+      final hasCachedData = _repository.hasEnoughCachedData();
+
       // We now only search for contests
-      await _searchContestsOnly();
+      await _searchContestsOnly(usingCache: hasCachedData);
     } catch (e) {
       emit(state.copyWith(
         error: 'Search failed: ${e.toString()}',
         isLoading: false,
+        usingCachedData: false,
       ));
     }
   }
 
-  Future<void> _searchContestsOnly() async {
+  Future<void> _searchContestsOnly({bool usingCache = false}) async {
     try {
+      debugPrint(
+          'Searching for "${state.query}" using ${usingCache ? 'cached data' : 'API'}');
       final results = await _searchContests(state.query);
+
       emit(state.copyWith(
         contestResults: results,
         contestantResults: [],
         isLoading: false,
+        usingCachedData: usingCache && results.isNotEmpty,
       ));
     } catch (e) {
       emit(state.copyWith(
         error: 'Failed to search contests: ${e.toString()}',
         isLoading: false,
         contestResults: [],
+        usingCachedData: false,
       ));
     }
   }

@@ -10,6 +10,7 @@ class SearchState {
   final List<dynamic> contestantResults; // Keeping for backwards compatibility
   final SearchFilter activeFilter;
   final int? selectedYear;
+  final bool usingCachedData; // Indicates if search results are from cache
 
   const SearchState({
     this.query = '',
@@ -19,6 +20,7 @@ class SearchState {
     this.contestantResults = const [],
     this.activeFilter = SearchFilter.all,
     this.selectedYear,
+    this.usingCachedData = false,
   });
 
   SearchState copyWith({
@@ -29,6 +31,7 @@ class SearchState {
     List<dynamic>? contestantResults,
     SearchFilter? activeFilter,
     int? selectedYear,
+    bool? usingCachedData,
     bool clearError = false,
   }) {
     return SearchState(
@@ -39,6 +42,7 @@ class SearchState {
       contestantResults: contestantResults ?? this.contestantResults,
       activeFilter: activeFilter ?? this.activeFilter,
       selectedYear: selectedYear ?? this.selectedYear,
+      usingCachedData: usingCachedData ?? this.usingCachedData,
     );
   }
 }

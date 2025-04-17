@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:eurovision_song_contest_clone/core/widgets/common/custom_app_bar.dart';
 import 'package:eurovision_song_contest_clone/core/theme/app_colors.dart';
 import 'package:eurovision_song_contest_clone/features/video/cubit/video_player_cubit.dart';
@@ -12,27 +13,24 @@ class VideoPlayerPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<VideoPlayerCubit, VideoPlayerState>(
       builder: (context, state) {
-        final cubit = context.read<VideoPlayerCubit>();
+        
 
         // Check if we're in landscape mode
         final isLandscape =
             MediaQuery.of(context).orientation == Orientation.landscape;
 
-        // If in landscape or fullscreen mode, show only the video
-        if (isLandscape || state.isFullScreen) {
+        // If in landscape mode, show a simpler layout
+        if (isLandscape) {
           return Scaffold(
             backgroundColor: Colors.black,
             body: SafeArea(
-              child: GestureDetector(
-                onTap: cubit.toggleFullScreen,
-                child: Center(
-                  child: VideoPlayerWidget(
-                    videoUrl: state.videoUrl,
-                    title: state.title,
-                    artistName: state.artistName,
-                    songName: state.songName,
-                    lyrics: state.lyrics,
-                  ),
+              child: Center(
+                child: VideoPlayerWidget(
+                  videoUrl: state.videoUrl,
+                  title: state.title,
+                  artistName: state.artistName,
+                  songName: state.songName,
+                  lyrics: state.lyrics,
                 ),
               ),
             ),
@@ -46,20 +44,9 @@ class VideoPlayerPageContent extends StatelessWidget {
             title: state.title ?? 'Video Player',
             actions: [
               IconButton(
-                icon: const Icon(Icons.fullscreen, color: Colors.white),
-                onPressed: cubit.toggleFullScreen,
-              ),
-              IconButton(
                 icon: const Icon(Icons.share_outlined, color: Colors.white),
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Share functionality coming soon'),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                      ),
-                    ),
-                  );
+                  _shareVideo(context, state.videoUrl, state.title);
                 },
               ),
             ],
@@ -76,5 +63,17 @@ class VideoPlayerPageContent extends StatelessWidget {
         );
       },
     );
+  }
+
+  // Share video URL with optional title
+  void _shareVideo(BuildContext context, String videoUrl, String? title) {
+    final cubit = context.read<VideoPlayerCubit>();
+    final shareableUrl = cubit.getShareableUrl();
+
+    final shareText = title != null
+        ? 'Check out this video: $title\n$shareableUrl'
+        : 'Check out this video: $shareableUrl';
+
+    Share.share(shareText);
   }
 }

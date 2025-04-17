@@ -11,6 +11,7 @@ class HomeState {
   final String? error;
   final List<int>? availableYears;
   final int? selectedYear;
+  final bool isOffline;
 
   const HomeState({
     this.tabController,
@@ -21,6 +22,7 @@ class HomeState {
     this.error,
     this.availableYears,
     this.selectedYear,
+    this.isOffline = false,
   });
 
   HomeState copyWith({
@@ -32,6 +34,7 @@ class HomeState {
     String? error,
     List<int>? availableYears,
     int? selectedYear,
+    bool? isOffline,
   }) {
     return HomeState(
       tabController: tabController ?? this.tabController,
@@ -42,6 +45,7 @@ class HomeState {
       availableYears: availableYears ?? this.availableYears,
       selectedYear: selectedYear ?? this.selectedYear,
       contestants: contestants ?? this.contestants,
+      isOffline: isOffline ?? this.isOffline,
     );
   }
 }

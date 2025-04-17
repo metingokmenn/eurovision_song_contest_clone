@@ -7,6 +7,9 @@ import 'package:eurovision_song_contest_clone/features/search/presentation/view/
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../di/service_provider.dart';
+import '../widgets/common/connectivity_banner.dart';
+
 class AppLayout extends StatelessWidget {
   const AppLayout({super.key});
 
@@ -15,15 +18,26 @@ class AppLayout extends StatelessWidget {
     return BlocBuilder<NavigationCubit, NavigationState>(
       builder: (context, state) {
         return Scaffold(
-          body: IndexedStack(
-            index: state.index,
-            children: const [
-              // Index 0: Home
-              HomePage(),
-              // Index 1: Search
-              SearchPage(),
-              // Index 2: Profile
-              ProfilePage(),
+          body: Column(
+            children: [
+              // Connectivity status banner
+              ConnectivityBanner(
+                connectivityService: ServiceProvider().connectivityService,
+              ),
+              // Main content
+              Expanded(
+                child: IndexedStack(
+                  index: state.index,
+                  children: const [
+                    // Index 0: Home
+                    HomePage(),
+                    // Index 1: Search
+                    SearchPage(),
+                    // Index 2: Profile
+                    ProfilePage(),
+                  ],
+                ),
+              ),
             ],
           ),
           bottomNavigationBar: const CustomNavigationBar(),
