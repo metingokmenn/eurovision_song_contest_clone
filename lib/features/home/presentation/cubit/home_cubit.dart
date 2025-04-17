@@ -14,7 +14,6 @@ import 'package:eurovision_song_contest_clone/features/home/domain/usecases/get_
 import 'package:eurovision_song_contest_clone/features/home/domain/usecases/get_contest_years.dart';
 import 'package:eurovision_song_contest_clone/features/home/presentation/cubit/home_state.dart';
 
-
 class HomeCubit extends Cubit<HomeState> {
   // Regular use cases for initial loading
   final GetContestByYear getContestByYear;
@@ -30,7 +29,7 @@ class HomeCubit extends Cubit<HomeState> {
   final TickerProvider vsync;
 
   // This TabController is created externally and passed to us
-  TabController? _tabController;
+  final TabController? _tabController;
 
   HomeCubit({
     required this.getContestByYear,

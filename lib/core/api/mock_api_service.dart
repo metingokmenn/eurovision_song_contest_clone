@@ -12,6 +12,7 @@ import 'api_service.dart';
 class MockApiService implements ApiService {
   final Random _random = Random();
 
+  @override
   Future<List<int>> getContestYears() async {
     // Simulate network delay
     await Future.delayed(Duration(milliseconds: 800 + _random.nextInt(400)));
@@ -20,6 +21,7 @@ class MockApiService implements ApiService {
     return List.generate(67, (index) => 2023 - index);
   }
 
+  @override
   Future<ContestModel> getContestByYear(int year) async {
     // Simulate network delay
     await Future.delayed(Duration(milliseconds: 600 + _random.nextInt(300)));
@@ -42,6 +44,7 @@ class MockApiService implements ApiService {
     );
   }
 
+  @override
   Future<List<ContestantModel>> getContestantsByYear(int year) async {
     // Simulate network delay
     await Future.delayed(Duration(milliseconds: 700 + _random.nextInt(300)));
@@ -81,6 +84,7 @@ class MockApiService implements ApiService {
     ];
   }
 
+  @override
   Future<List<PerformanceModel>> getVotingResultsByYear(int year) async {
     // Simulate network delay
     await Future.delayed(Duration(milliseconds: 900 + _random.nextInt(400)));
@@ -141,6 +145,7 @@ class MockApiService implements ApiService {
     ];
   }
 
+  @override
   Future<List<Map<String, dynamic>>> getFeaturedContent() async {
     // Simulate network delay
     await Future.delayed(Duration(milliseconds: 500 + _random.nextInt(300)));
@@ -174,6 +179,7 @@ class MockApiService implements ApiService {
     ];
   }
 
+  @override
   Future<List<ContestModel>> searchContests(String query) async {
     // Simulate network delay
     await Future.delayed(Duration(milliseconds: 600 + _random.nextInt(300)));

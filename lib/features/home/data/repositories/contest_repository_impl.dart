@@ -89,6 +89,7 @@ class ContestRepositoryImpl implements ContestRepository {
   }
 
   /// Check if all required data for UI interactions is available in cache
+  @override
   bool isDataAvailableInCache(int year) {
     try {
       return localDataSource.isYearDataLoaded(year);

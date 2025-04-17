@@ -117,8 +117,8 @@ class ContestantSelector extends StatelessWidget {
   Widget _buildCountryAvatar(BuildContext context, String? country) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final backgroundColor = isDarkMode
-        ? Color.fromARGB(40, 216, 27, 96)
-        : Color.fromARGB(20, 216, 27, 96);
+        ? const Color.fromARGB(40, 216, 27, 96)
+        : const Color.fromARGB(20, 216, 27, 96);
 
     if (country == null || country.isEmpty) {
       return Container(
@@ -263,8 +263,8 @@ class _ContestantSelectorContent extends StatelessWidget {
   Widget _buildCountryAvatar(BuildContext context, String? country) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final backgroundColor = isDarkMode
-        ? Color.fromARGB(40, 216, 27, 96)
-        : Color.fromARGB(20, 216, 27, 96);
+        ? const Color.fromARGB(40, 216, 27, 96)
+        : const Color.fromARGB(20, 216, 27, 96);
 
     if (country == null || country.isEmpty) {
       return Container(

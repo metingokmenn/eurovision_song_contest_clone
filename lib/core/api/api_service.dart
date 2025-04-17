@@ -20,6 +20,7 @@ class ApiServiceImpl implements ApiService {
       : _apiClient = apiClient ?? ApiClient();
 
   /// Get all contest years
+  @override
   Future<List<int>> getContestYears() async {
     try {
       final response = await _apiClient.get('/contests/years');
@@ -30,6 +31,7 @@ class ApiServiceImpl implements ApiService {
   }
 
   /// Get details for a specific contest year
+  @override
   Future<ContestModel> getContestByYear(int year) async {
     try {
       final response = await _apiClient.get('/contests/$year');
@@ -40,6 +42,7 @@ class ApiServiceImpl implements ApiService {
   }
 
   /// Get contestants for a specific contest year
+  @override
   Future<List<ContestantModel>> getContestantsByYear(int year) async {
     try {
       // The contest details already include contestant references
@@ -60,6 +63,7 @@ class ApiServiceImpl implements ApiService {
   }
 
   /// Get voting results for a specific contest year
+  @override
   Future<List<PerformanceModel>> getVotingResultsByYear(int year) async {
     try {
       // The voting results are included in the rounds data within contest details
@@ -78,6 +82,8 @@ class ApiServiceImpl implements ApiService {
   }
 
   /// Get featured content for the app
+  
+  @override
   Future<List<Map<String, dynamic>>> getFeaturedContent() async {
     try {
       final response = await _apiClient.get('/featured');
@@ -88,6 +94,7 @@ class ApiServiceImpl implements ApiService {
   }
 
   /// Search for contests
+  @override
   Future<List<ContestModel>> searchContests(String query) async {
     try {
       final response = await _apiClient.get('/search/contests?query=$query');

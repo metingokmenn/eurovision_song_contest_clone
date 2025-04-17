@@ -1,5 +1,5 @@
 import 'package:eurovision_song_contest_clone/core/utils/country_code_converter.dart';
-import 'package:eurovision_song_contest_clone/core/widgets/common/custom_dropdown.dart';
+
 import 'package:eurovision_song_contest_clone/core/widgets/selectors/contestant_selector.dart';
 import 'package:eurovision_song_contest_clone/features/home/data/models/contest_model.dart';
 import 'package:eurovision_song_contest_clone/features/home/presentation/cubit/home_cubit.dart';
@@ -99,10 +99,10 @@ class ContestantsTabContent extends StatelessWidget {
 
   Widget _buildContestantsDropdown(BuildContext context, HomeState state) {
     // Get the currently selected contestant ID or default to the first contestant
-    final currentContestantId = state.currentContestant?.id ??
+    /* final currentContestantId = state.currentContestant?.id ??
         (contest.contestants?.isNotEmpty == true
             ? contest.contestants!.first!.id
-            : null);
+            : null); */
 
     return ContestantSelector(
       contestants: contest.contestants ?? [],
@@ -418,7 +418,7 @@ class ContestantsTabContent extends StatelessWidget {
     );
   }
 
-  Widget _buildCountryAvatar(String? country) {
+  /* Widget _buildCountryAvatar(String? country) {
     if (country == null || country.isEmpty) {
       return Container(
         width: 36,
@@ -462,7 +462,7 @@ class ContestantsTabContent extends StatelessWidget {
         ),
       ),
     );
-  }
+  } */
 
   Widget _buildCountryFlag(String? country) {
     if (country == null || country.isEmpty) {

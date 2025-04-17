@@ -93,7 +93,7 @@ class AppDataManager {
         ? yearsToLoad.sublist(yearsToLoad.length - 10)
         : yearsToLoad;
 
-    final batchSize = 3;
+    const batchSize = 3;
     for (var i = 0; i < recentYears.length; i += batchSize) {
       final end = (i + batchSize < recentYears.length)
           ? i + batchSize
@@ -108,7 +108,7 @@ class AppDataManager {
     }
 
     _isLoadingComplete = true;
-    debugPrint('Completed loading data for ${_yearsLoaded} years');
+    debugPrint('Completed loading data for $_yearsLoaded years');
   }
 
   Future<void> _loadYearData(int year) async {

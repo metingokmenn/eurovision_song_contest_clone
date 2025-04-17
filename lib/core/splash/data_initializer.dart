@@ -147,7 +147,7 @@ class DataInitializer {
 
   void debugPrint(String message) {
     // Use Flutter's debugPrint
-    print('[DataInitializer] $message');
+    debugPrint('[DataInitializer] $message');
   }
 
   /// Close resources
