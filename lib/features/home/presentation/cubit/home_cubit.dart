@@ -4,8 +4,7 @@ import 'package:eurovision_song_contest_clone/core/data/app_data_manager.dart';
 import 'package:eurovision_song_contest_clone/core/utils/country_code_converter.dart';
 import 'package:eurovision_song_contest_clone/features/home/data/models/contest_model.dart';
 import 'package:eurovision_song_contest_clone/features/home/data/models/contestant_model.dart';
-import 'package:eurovision_song_contest_clone/features/home/domain/usecases/get_cached_contest_by_year.dart';
-import 'package:eurovision_song_contest_clone/features/home/domain/usecases/get_cached_contestants_by_year.dart';
+
 import 'package:eurovision_song_contest_clone/features/home/domain/usecases/get_contestant_by_year.dart';
 import 'package:eurovision_song_contest_clone/features/home/domain/usecases/get_contestants_by_year.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +19,6 @@ class HomeCubit extends Cubit<HomeState> {
   final GetContestYears getContestYears;
   final GetContestantByYear getContestantByYear;
   final GetContestantsByYear getContestantsByYear;
-
-  // Cache-only use cases for dropdown interactions
-  late final GetCachedContestByYear _getCachedContestByYear;
-  late final GetCachedContestantsByYear _getCachedContestantsByYear;
 
   final AppDataManager _appDataManager;
   final TickerProvider vsync;
@@ -42,10 +37,6 @@ class HomeCubit extends Cubit<HomeState> {
   })  : _appDataManager = appDataManager,
         _tabController = tabController,
         super(const HomeState()) {
-    // Initialize cache-only use cases
-    _getCachedContestByYear = GetCachedContestByYear(_appDataManager);
-    _getCachedContestantsByYear = GetCachedContestantsByYear(_appDataManager);
-
     _initialize();
   }
 
@@ -122,19 +113,13 @@ class HomeCubit extends Cubit<HomeState> {
           }
 
           // Get latest cached contest data
-          final contest = await _getCachedContestByYear(latestCachedYear);
-          final contestants =
-              await _getCachedContestantsByYear(latestCachedYear);
+          final contest = await getContestByYear(latestCachedYear);
+          final contestants = await getContestantsByYear(latestCachedYear);
 
           // Use first contestant if available
           ContestantModel? contestant;
           if (contestants.isNotEmpty) {
-            if (contestants[0] is ContestantModel) {
-              contestant = contestants[0] as ContestantModel;
-            } else if (contestants[0] is Map<String, dynamic>) {
-              contestant = ContestantModel.fromJson(
-                  contestants[0] as Map<String, dynamic>);
-            }
+            contestant = contestants[0];
           }
 
           emit(state.copyWith(
@@ -185,34 +170,10 @@ class HomeCubit extends Cubit<HomeState> {
       ContestModel contest;
       List<ContestantModel> contestants = [];
 
-      // Try to get data from cache first
-      if (_getCachedContestByYear.isDataAvailable(year)) {
-        debugPrint('Using cached data for year $year');
-        contest = await _getCachedContestByYear(year);
-
-        // Use cached contestants directly from AppDataManager
-        try {
-          final cachedContestants = await _getCachedContestantsByYear(year);
-          // Convert dynamic list to ContestantModel list
-          if (cachedContestants.isNotEmpty) {
-            contestants = cachedContestants
-                .where((c) => c is Map<String, dynamic> || c is ContestantModel)
-                .map((c) {
-              if (c is ContestantModel) return c;
-              return ContestantModel.fromJson(c as Map<String, dynamic>);
-            }).toList();
-          }
-        } catch (e) {
-          // Fallback to API if contestants not in cache
-          debugPrint('Cached contestants not available: $e');
-          contestants = await getContestantsByYear(year);
-        }
-      } else {
-        // If not available in cache, use the regular use cases
-        debugPrint('Cache miss for year $year, using API');
-        contest = await getContestByYear(year);
-        contestants = await getContestantsByYear(year);
-      }
+      // If not available in cache, use the regular use cases
+      debugPrint('Cache miss for year $year, using API');
+      contest = await getContestByYear(year);
+      contestants = await getContestantsByYear(year);
 
       // Get first contestant
       ContestantModel contestant;

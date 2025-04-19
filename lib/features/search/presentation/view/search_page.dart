@@ -1,4 +1,3 @@
-import 'package:eurovision_song_contest_clone/features/search/domain/repositories/search_repository.dart';
 import 'package:eurovision_song_contest_clone/features/search/domain/usecases/search_contests.dart';
 import 'package:eurovision_song_contest_clone/features/search/presentation/cubit/search_cubit.dart';
 import 'package:eurovision_song_contest_clone/features/search/presentation/view/search_page_view.dart';
@@ -16,7 +15,6 @@ class SearchPage extends StatelessWidget {
         return BlocProvider(
           create: (context) => SearchCubit(
             searchContests: context.read<SearchContests>(),
-            repository: context.read<SearchRepository>(),
           ),
           child: const SearchPageView(),
         );

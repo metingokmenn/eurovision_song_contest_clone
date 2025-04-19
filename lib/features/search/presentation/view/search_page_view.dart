@@ -184,38 +184,6 @@ class SearchPageContent extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  // Show badge when using cached results
-                  if (state.usingCachedData)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 4.0,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.green.shade100,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.green.shade600),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.cached,
-                            size: 14,
-                            color: Colors.green.shade800,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            'Cached Results',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.green.shade800,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                 ],
               ),
             ),

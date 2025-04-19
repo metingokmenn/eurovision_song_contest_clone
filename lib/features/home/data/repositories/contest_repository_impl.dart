@@ -1,4 +1,3 @@
-import 'package:eurovision_song_contest_clone/features/home/data/datasources/contest_local_data_source.dart';
 import 'package:eurovision_song_contest_clone/features/home/data/datasources/contest_remote_data_source.dart';
 import 'package:eurovision_song_contest_clone/features/home/domain/repositories/contest_repository.dart';
 import 'package:eurovision_song_contest_clone/features/home/data/models/contest_model.dart';
@@ -6,70 +5,41 @@ import 'package:flutter/material.dart';
 
 class ContestRepositoryImpl implements ContestRepository {
   final ContestRemoteDataSource remoteDataSource;
-  final ContestLocalDataSource localDataSource;
-
-  // Flag to determine whether to use only cache
-  final bool _useCacheOnly;
 
   ContestRepositoryImpl({
     required this.remoteDataSource,
-    required this.localDataSource,
-    bool useCacheOnly = false,
-  }) : _useCacheOnly = useCacheOnly;
+  });
 
   @override
   Future<List<int>> getContestYears() async {
     try {
-      // Get data from local cache
-      return await localDataSource.getContestYears();
-    } catch (e) {
-      if (_useCacheOnly) {
-        // If we're cache-only, rethrow the exception
-        debugPrint('Cache-only mode: Years not available in cache');
-        rethrow;
-      }
-
-      debugPrint('Local data source failed: $e');
-      // If local fails and we're not cache-only, fall back to remote
+      // Get data from remote source
       return await remoteDataSource.getContestYears();
+    } catch (e) {
+      debugPrint('Remote data source failed: $e');
+      throw Exception('Failed to get contest years: $e');
     }
   }
 
   @override
   Future<ContestModel> getContestByYear(int year) async {
     try {
-      // Get data from local cache
-      return await localDataSource.getContestByYear(year);
-    } catch (e) {
-      if (_useCacheOnly) {
-        // If we're cache-only, rethrow the exception
-        debugPrint(
-            'Cache-only mode: Contest for year $year not available in cache');
-        rethrow;
-      }
-
-      debugPrint('Local data source failed for year $year: $e');
-      // If local fails and we're not cache-only, fall back to remote
+      // Get data from remote source
       return await remoteDataSource.getContestByYear(year);
+    } catch (e) {
+      debugPrint('Remote data source failed for year $year: $e');
+      throw Exception('Failed to get contest for year $year: $e');
     }
   }
 
   @override
   Future<List<dynamic>> getContestantsByYear(int year) async {
     try {
-      // Get data from local cache
-      return await localDataSource.getContestantsByYear(year);
-    } catch (e) {
-      if (_useCacheOnly) {
-        // If we're cache-only, rethrow the exception
-        debugPrint(
-            'Cache-only mode: Contestants for year $year not available in cache');
-        rethrow;
-      }
-
-      debugPrint('Local data source failed for contestants in year $year: $e');
-      // If local fails and we're not cache-only, fall back to remote
+      // Get data from remote source
       return await remoteDataSource.getContestantsByYear(year);
+    } catch (e) {
+      debugPrint('Remote data source failed for contestants in year $year: $e');
+      throw Exception('Failed to get contestants for year $year: $e');
     }
   }
 
@@ -91,10 +61,7 @@ class ContestRepositoryImpl implements ContestRepository {
   /// Check if all required data for UI interactions is available in cache
   @override
   bool isDataAvailableInCache(int year) {
-    try {
-      return localDataSource.isYearDataLoaded(year);
-    } catch (e) {
-      return false;
-    }
+    // Since we're not using local cache anymore, always return false
+    return false;
   }
 }

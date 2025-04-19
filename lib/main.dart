@@ -1,4 +1,3 @@
-import 'package:eurovision_song_contest_clone/core/data/app_data_manager.dart';
 import 'package:eurovision_song_contest_clone/core/di/service_provider.dart';
 import 'package:eurovision_song_contest_clone/core/splash/splash_screen.dart';
 import 'package:eurovision_song_contest_clone/core/theme/cubit/theme_cubit.dart';
@@ -22,19 +21,11 @@ import 'package:http/http.dart' as http;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Initialize the AppDataManager singleton
-  final appDataManager = AppDataManager();
-  await appDataManager.initialize();
-  await appDataManager.loadInitialData();
-
-  runApp(EurovisionSongContestApp(appDataManager: appDataManager));
+  runApp(const EurovisionSongContestApp());
 }
 
 class EurovisionSongContestApp extends StatefulWidget {
-  final AppDataManager appDataManager;
-
-  const EurovisionSongContestApp({super.key, required this.appDataManager});
+  const EurovisionSongContestApp({super.key});
 
   @override
   State<EurovisionSongContestApp> createState() =>
@@ -54,56 +45,58 @@ class _EurovisionSongContestAppState extends State<EurovisionSongContestApp> {
   @override
   Widget build(BuildContext context) {
     // Create repositories for initial data loading
-    final contestRepository = RepositoryFactory.createRepository(
-        appDataManager: widget.appDataManager);
+    final contestRepository = RepositoryFactory.createRepository();
 
     final contestantRepository = ContestantRepositoryImpl(
       remoteDataSource: ContestantRemoteDataSource(client: http.Client()),
     );
 
+    // Use case instances
+    final getContestYears = GetContestYears(contestRepository);
+    final getContestByYear = GetContestByYear(contestRepository);
+    final getContestantsByYear = GetContestantsByYear(contestantRepository);
+    final getContestantByYear = GetContestantByYear(contestantRepository);
+
     return MultiBlocProvider(
       providers: [
+        // Theme cubit for handling app theme
         BlocProvider<ThemeCubit>(
           create: (context) => ThemeCubit(),
         ),
+        // Navigation cubit for handling app navigation
         BlocProvider<NavigationCubit>(
           create: (context) => NavigationCubit(),
         ),
-      ],
-      child: MultiRepositoryProvider(
-        providers: [
-          // Contest and contestant providers
-          RepositoryProvider<GetContestByYear>(
-            create: (context) => GetContestByYear(contestRepository),
-          ),
-          RepositoryProvider<GetContestYears>(
-            create: (context) => GetContestYears(contestRepository),
-          ),
-          RepositoryProvider<GetContestantByYear>(
-            create: (context) => GetContestantByYear(contestantRepository),
-          ),
-          RepositoryProvider<GetContestantsByYear>(
-            create: (context) => GetContestantsByYear(contestantRepository),
-          ),
-          // AppDataManager provider
-          RepositoryProvider<AppDataManager>(
-            create: (context) => widget.appDataManager,
-          ),
-          // Search providers
-          ...SearchDependencyInjection.getRepositoryProviders(),
-        ],
-        child: BlocBuilder<ThemeCubit, ThemeState>(
-          builder: (context, state) {
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'Eurovision Song Contest',
-              theme: AppTheme.lightTheme,
-              darkTheme: AppTheme.darkTheme,
-              themeMode: state.themeMode,
-              home: const SplashScreen(),
-            );
-          },
+        // Core repository providers
+        RepositoryProvider(
+          create: (context) => contestRepository,
         ),
+        RepositoryProvider(
+          create: (context) => getContestYears,
+        ),
+        RepositoryProvider(
+          create: (context) => getContestByYear,
+        ),
+        RepositoryProvider(
+          create: (context) => getContestantsByYear,
+        ),
+        RepositoryProvider(
+          create: (context) => getContestantByYear,
+        ),
+        // Add search-related providers
+        ...SearchDependencyInjection.getRepositoryProviders(),
+      ],
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, state) {
+          return MaterialApp(
+            title: 'Eurovision Song Contest',
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: state.themeMode,
+            home: const SplashScreen(),
+            debugShowCheckedModeBanner: false,
+          );
+        },
       ),
     );
   }
