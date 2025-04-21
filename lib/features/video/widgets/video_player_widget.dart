@@ -39,10 +39,6 @@ class VideoPlayerWidget extends StatelessWidget {
 class _VideoPlayerContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Determine if we're in landscape mode
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-
     return BlocBuilder<VideoPlayerCubit, VideoPlayerState>(
       builder: (context, state) {
         if (state.isError) {
@@ -50,11 +46,11 @@ class _VideoPlayerContent extends StatelessWidget {
         }
 
         if (state.isYoutubeVideo) {
-          return _buildYoutubePlayer(context, state, isLandscape);
+          return _buildYoutubePlayer(context, state, state.isFullScreen);
         }
 
         return state.isInitialized && state.controller != null
-            ? _buildVideoPlayer(context, state, isLandscape)
+            ? _buildVideoPlayer(context, state, state.isFullScreen)
             : const Center(
                 child: CircularProgressIndicator(
                   color: AppColors.magenta,
@@ -65,11 +61,11 @@ class _VideoPlayerContent extends StatelessWidget {
   }
 
   Widget _buildVideoPlayer(
-      BuildContext context, VideoPlayerState state, bool isLandscape) {
+      BuildContext context, VideoPlayerState state, bool isFullScreen) {
     final cubit = context.read<VideoPlayerCubit>();
 
-    // For landscape mode, use full screen size
-    if (isLandscape) {
+    // For fullscreen mode, use full screen size
+    if (isFullScreen) {
       return Container(
         color: Colors.black,
         width: double.infinity,
@@ -174,7 +170,7 @@ class _VideoPlayerContent extends StatelessWidget {
         ),
 
         // Lyrics section if available (only in portrait mode)
-        if (!isLandscape && state.lyrics != null && state.lyrics!.isNotEmpty)
+        if (!isFullScreen && state.lyrics != null && state.lyrics!.isNotEmpty)
           _buildLyricsSection(context, state),
       ],
     );
@@ -237,12 +233,12 @@ class _VideoPlayerContent extends StatelessWidget {
   }
 
   Widget _buildYoutubePlayer(
-      BuildContext context, VideoPlayerState state, bool isLandscape) {
+      BuildContext context, VideoPlayerState state, bool isFullScreen) {
     if (state.webViewController == null) {
       return _buildErrorWidget();
     }
 
-    if (isLandscape) {
+    if (isFullScreen) {
       return SizedBox.expand(
         child: WebViewWidget(controller: state.webViewController!),
       );
@@ -303,7 +299,7 @@ class _VideoPlayerContent extends StatelessWidget {
         ),
 
         // Lyrics section if available (only in portrait mode)
-        if (!isLandscape && state.lyrics != null && state.lyrics!.isNotEmpty)
+        if (!isFullScreen && state.lyrics != null && state.lyrics!.isNotEmpty)
           _buildLyricsSection(context, state),
       ],
     );
@@ -352,37 +348,50 @@ class _VideoPlayerContent extends StatelessWidget {
     final cubit = context.read<VideoPlayerCubit>();
 
     return GestureDetector(
-      onTap: () => cubit.toggleControlsVisibility(!state.isControlsVisible),
-      child: Container(
-        color: Colors.transparent,
-        child: AnimatedOpacity(
-          opacity: state.isControlsVisible || !state.isPlaying ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 300),
-          child: Stack(
-            children: [
-              // Darkened background for visibility
-              Container(
-                // ignore: deprecated_member_use
-                color: Colors.black.withAlpha(120),
-              ),
-
-              // Play/pause button
-              Center(
-                child: GestureDetector(
-                  onTap: () => cubit.togglePlayPause(),
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    color: AppColors.magenta.withAlpha(180),
-                    child: Icon(
-                      state.isPlaying ? Icons.pause : Icons.play_arrow,
-                      color: Colors.white,
-                      size: 32,
-                    ),
-                  ),
+      onTap: () {
+        // Toggle the overlay controls visibility
+        cubit.toggleControlsVisibility(null);
+      },
+      child: AnimatedOpacity(
+        opacity: state.isControlsVisible ? 1.0 : 0.0,
+        duration: const Duration(milliseconds: 300),
+        child: Stack(
+          children: [
+            // Semi-transparent background
+            Container(
+              color: Colors.black.withOpacity(0.4),
+            ),
+            // Centered play/pause button
+            Center(
+              child: IconButton(
+                icon: Icon(
+                  state.isPlaying
+                      ? Icons.pause_circle_filled
+                      : Icons.play_circle_filled,
+                  color: Colors.white,
+                  size: 64.0,
                 ),
+                onPressed: () {
+                  cubit.togglePlayPause();
+                },
               ),
-            ],
-          ),
+            ),
+            // Fullscreen button at bottom right
+            Positioned(
+              bottom: 16,
+              right: 16,
+              child: IconButton(
+                icon: Icon(
+                  state.isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
+                  color: Colors.white,
+                  size: 28.0,
+                ),
+                onPressed: () {
+                  cubit.toggleFullScreen(context);
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

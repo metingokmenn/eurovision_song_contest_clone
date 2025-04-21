@@ -1,4 +1,4 @@
-import 'package:eurovision_song_contest_clone/core/data/app_data_manager.dart';
+
 import 'package:eurovision_song_contest_clone/core/widgets/animation/animation_provider.dart';
 import 'package:eurovision_song_contest_clone/features/home/domain/usecases/get_contestant_by_year.dart';
 import 'package:eurovision_song_contest_clone/features/home/domain/usecases/get_contestants_by_year.dart';
@@ -48,7 +48,6 @@ class HomePage extends StatelessWidget {
                   getContestYears: context.read<GetContestYears>(),
                   getContestantByYear: context.read<GetContestantByYear>(),
                   getContestantsByYear: context.read<GetContestantsByYear>(),
-                  appDataManager: context.read<AppDataManager>(),
                   vsync: vsyncProvider!,
                   tabController: tabState.tabController,
                 ),

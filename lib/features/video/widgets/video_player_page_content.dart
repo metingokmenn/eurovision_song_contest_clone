@@ -13,14 +13,11 @@ class VideoPlayerPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<VideoPlayerCubit, VideoPlayerState>(
       builder: (context, state) {
-        
+        // Check if we're in fullscreen mode
+        final isFullScreen = state.isFullScreen;
 
-        // Check if we're in landscape mode
-        final isLandscape =
-            MediaQuery.of(context).orientation == Orientation.landscape;
-
-        // If in landscape mode, show a simpler layout
-        if (isLandscape) {
+        // If in fullscreen mode, show a simpler layout
+        if (isFullScreen) {
           return Scaffold(
             backgroundColor: Colors.black,
             body: SafeArea(
@@ -41,7 +38,6 @@ class VideoPlayerPageContent extends StatelessWidget {
         return Scaffold(
           backgroundColor: AppColors.background,
           appBar: CustomAppBar(
-            title: state.title ?? 'Video Player',
             actions: [
               IconButton(
                 icon: const Icon(Icons.share_outlined, color: Colors.white),
@@ -70,9 +66,7 @@ class VideoPlayerPageContent extends StatelessWidget {
     final cubit = context.read<VideoPlayerCubit>();
     final shareableUrl = cubit.getShareableUrl();
 
-    final shareText = title != null
-        ? 'Check out this video: $title\n$shareableUrl'
-        : 'Check out this video: $shareableUrl';
+    final shareText = 'Check out this video: $shareableUrl';
 
     Share.share(shareText);
   }

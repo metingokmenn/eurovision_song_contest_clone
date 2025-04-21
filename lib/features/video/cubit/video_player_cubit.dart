@@ -105,14 +105,12 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
 
   // Method to handle orientation permissions
   void addOrientationListener() {
-    // Set preferred orientations to allow both portrait and landscape
+    // Initially only allow portrait orientation
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
     ]);
 
-    // Ensure system UI is always in edge-to-edge mode
+    // Ensure system UI is visible
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 
@@ -246,6 +244,26 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
     emit(state.copyWith(
       isControlsVisible: visible ?? !state.isControlsVisible,
     ));
+  }
+
+  // Toggle fullscreen mode
+  void toggleFullScreen(BuildContext context) {
+    final isCurrentlyFullScreen = state.isFullScreen;
+
+    if (isCurrentlyFullScreen) {
+      // Exit fullscreen
+      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    } else {
+      // Enter fullscreen
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    }
+
+    emit(state.copyWith(isFullScreen: !isCurrentlyFullScreen));
   }
 
   // Helper to check if a URL is a YouTube URL

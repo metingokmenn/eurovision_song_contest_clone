@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:eurovision_song_contest_clone/core/data/app_data_manager.dart';
 import 'package:eurovision_song_contest_clone/core/utils/country_code_converter.dart';
 import 'package:eurovision_song_contest_clone/features/home/data/models/contest_model.dart';
 import 'package:eurovision_song_contest_clone/features/home/data/models/contestant_model.dart';
@@ -20,7 +19,6 @@ class HomeCubit extends Cubit<HomeState> {
   final GetContestantByYear getContestantByYear;
   final GetContestantsByYear getContestantsByYear;
 
-  final AppDataManager _appDataManager;
   final TickerProvider vsync;
 
   // This TabController is created externally and passed to us
@@ -31,11 +29,9 @@ class HomeCubit extends Cubit<HomeState> {
     required this.getContestYears,
     required this.getContestantByYear,
     required this.getContestantsByYear,
-    required AppDataManager appDataManager,
     required this.vsync,
     TabController? tabController,
-  })  : _appDataManager = appDataManager,
-        _tabController = tabController,
+  })  : _tabController = tabController,
         super(const HomeState()) {
     _initialize();
   }
@@ -51,7 +47,7 @@ class HomeCubit extends Cubit<HomeState> {
       } catch (e) {
         debugPrint('Error loading years: $e');
         // Fall back to cache if API fails
-        years = await _appDataManager.getContestYears();
+        years = await getContestYears();
       }
 
       if (years.isEmpty) {
@@ -97,7 +93,7 @@ class HomeCubit extends Cubit<HomeState> {
 
       // Try to use cache for initial data if available
       try {
-        final cachedYears = await _appDataManager.getContestYears();
+        final cachedYears = await getContestYears();
         if (cachedYears.isNotEmpty) {
           final latestCachedYear = cachedYears.last;
 
